@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.3.1/darkly/bootstrap.min.css">
+    <style>
+        #base64Input {
+            height: 70vh;
+            background-color: #333;
+            color: #fff;
+        }
+        #inputFile {
+            display: none;
+        }
+        .custom-file-upload {
+            border: 1px solid #ccc;
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            color: #fff;
+            background-color: #333;
+        }
+        #inputImage, #outputImage{
+        	max-height: 20vh
+        }
+    </style>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <h3 class="mb-4 light">Image to Base64 Converter</h3>
+            <label for="inputFile" class="custom-file-upload form-control mb-3">
+                Choose Image File
+            </label>
+            <input type='file' id='inputFile' accept="image/*" onchange='loadImage();convertToBase64()'>
+            <p><img id='inputImage' class="mt-3 img-fluid"></p>
+            
+            <!--<p><button onclick='convertToBase64()' class="btn btn-primary">Convert to Base64</button></p>-->
+            
+            <!--<p id='base64' class="mt-3 text-light"></p>-->
+            
+        </div>
+        
+        <div class="col-lg-6">
+            <!--<h2 class="mb-4 light">Base64 to Image Converter</h2>-->
+            
+            <textarea id='base64Input' class="form-control mb-3" ></textarea>
+            <button onclick='convertToImage()' class="btn btn-primary">Convert to Image</button>
+            <br>
+            <img id='outputImage' class="mt-3 img-fluid"><br>
+        </div>
+    </div>
+</div>
+
+<script>
+function loadImage(file = document.querySelector('#inputFile').files[0]){
+    //var file = document.querySelector('#inputFile').files[0];
+    var reader = new FileReader();
+
+    reader.addEventListener("load", function () {
+        //document.querySelector('#base64Input').textContent = reader.result;
+        document.querySelector('#inputImage').src = reader.result;
+        convertToBase64();
+    }, false);
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+
+}
+
+function convertToBase64() {
+
+    document.querySelector('#base64Input').value = document.querySelector('#inputImage').src; 
+}
+
+function convertToImage() {
+    var base64String = document.querySelector('#base64Input').value;
+    document.querySelector('#outputImage').src = base64String;
+}
+
+window.addEventListener('paste', function (event) {
+	
+    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    var item = items[0];
+    
+    console.log("paste value", item);
+  	if (item.kind === 'file') {
+      loadImage( item.getAsFile());
+  	}
+});
+
+/*
+window.addEventListener('paste', function (event) {
+    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+    for (var index in items) {
+        var item = items[index];
+        console.log(item);
+        if (item.kind === 'file') {
+            var blob = item.getAsFile();
+            var reader = new FileReader();
+            reader.onload = function(event){
+                //document.querySelector('#inputFile').files[0] =
+                //console.log(event.target.result);
+            }; 
+            reader.readAsDataURL(blob);
+        }
+    }
+});
+*/
+</script>
+
+</body>
+</html>
