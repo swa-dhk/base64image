@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        #image {
+            height: 15%;
+            object-fit: contain;
+            display: none;
+        }
+        #base64 {
+            height: 80%;
+            margin-top: 1em;
+            padding: 0.5em;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+        button {
+            margin-top: 1em;
+            padding: 0.5em;
+            border: none;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Image to Base64 and Vice Versa</h2>
+
+<input type='file' id='inputFile'>
+<br>
+<img id='image'>
+<br>
+<button onclick='convertToBase64()'>Convert to Base64</button>
+<textarea id='base64'></textarea>
+<br>
+<button onclick='convertToImage()'>Convert to Image</button>
+
+<script>
+function convertToBase64() {
+    var file = document.querySelector('#inputFile').files[0];
+    var reader = new FileReader();
+
+    reader.addEventListener("load", function () {
+        document.querySelector('#base64').value = reader.result;
+    }, false);
+
+    if (file) {
+        reader.readAsDataURL(file);
+    }
+}
+
+function convertToImage() {
+    var base64 = document.querySelector('#base64').value;
+    var image = document.querySelector('#image');
+
+    image.src = base64;
+    image.style.display = 'block';
+}
+</script>
+
+</body>
+</html>
